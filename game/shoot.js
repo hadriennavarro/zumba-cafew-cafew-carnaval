@@ -44,13 +44,35 @@ function bullet_collision()
     //collision between bullet and walls
     for (var i = 0; i < player1.bullets.length; i++)
     {
-        if (Math.abs(player1.bullets[i].position.x) >= WIDTH / 2 ||
-            Math.abs(player1.bullets[i].position.y) >= HEIGHT / 2)
+        
+
+        bulletx = player1.bullets[i].position.x
+        bullety = player1.bullets[i].position.y
+        if (ennemy)
+        {
+            if ((bulletx >= ennemy.position.x - sizeOfTileX - sizeOfTileX / 2 && bulletx <= ennemy.position.x - sizeOfTileX / 2) && 
+            (bullety >= ennemy.position.y - sizeOfTileY / 2 && bullety <= ennemy.position.y + sizeOfTileY / 2))
+            {
+                console.log("touché");
+                scene.remove(ennemy.graphic)
+                ennemy = null
+                scene.remove(player1.bullets[i]);
+                player1.bullets.splice(i, 1);
+
+                i--;
+            }
+        }
+
+        if (Math.abs(bulletx) >= WIDTH / 2 ||
+            Math.abs(bullety) >= HEIGHT / 2)
         {
             scene.remove(player1.bullets[i]);
             player1.bullets.splice(i, 1);
             i--;
         }
+
+        
+
     }
 
 }
@@ -63,6 +85,8 @@ function player_collision()
 
     if ( x > WIDTH )
         player1.graphic.position.x -= x - WIDTH;
+    if ( x < 0 )
+        player1.graphic.position.x -= x
     if ( y < 0 )
         player1.graphic.position.y -= y;
     if ( y > HEIGHT )
@@ -83,10 +107,13 @@ function player_falling()
     for (var i = 0; i < length; i++) {
         element = noGround[i];
 
-        var tileX = (element[0]) | 0;
-        var tileY = (element[1]) | 0;
-        var mtileX = (element[0] + sizeOfTileX) | 0;
-        var mtileY = (element[1] + sizeOfTileY) | 0;
+        if (element)
+        {
+            var tileX = (element[0]) | 0;
+            var tileY = (element[1]) | 0;
+            var mtileX = (element[0] + sizeOfTileX) | 0;
+            var mtileY = (element[1] + sizeOfTileY) | 0;
+        }
 
         if ((x > tileX)
             && (x < mtileX)
